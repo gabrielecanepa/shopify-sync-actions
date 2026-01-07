@@ -1,24 +1,14 @@
 {
-  "name": "shopify",
+  "name": "shopify-sync-actions",
   "version": "1.0.1",
-  "author": {
-    "name": "GZETA",
-    "url": "https://gzeta-adv.it"
-  },
   "packageManager": "pnpm@8.10.5",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gzeta-adv/shopify.git"
-  },
   "scripts": {
     "prepare": "husky",
     "build": "tsc",
-    "dev": "NODE_ENV=development ts-node src/index.ts",
-    "action": "ts-node src/index.ts",
-    "lint": "pnpm lint:code && pnpm lint:commits",
-    "lint:code": "eslint src --ext .ts",
-    "lint:code:fix": "eslint src --ext .ts --fix",
-    "lint:commits": "commitlint --from origin/main --to HEAD --verbose",
+    "dev": "NODE_ENV=development tsx src/index.ts",
+    "action": "tsx src/index.ts",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
     "check": "tsc --noEmit && pnpm run lint",
     "release": "dotenv release-it"
   },
@@ -32,8 +22,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@release-it/bumper": "^6.0.1",
-    "@release-it/conventional-changelog": "^8.0.1",
     "@shopify/cli": "^3.60.1",
     "@types/node": "^20.12.12",
     "@types/pluralize": "^0.0.33",
@@ -50,9 +38,7 @@
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "release-it": "^17.3.0",
-    "ts-node": "^10.9.2",
-    "tsc-alias": "^1.8.10",
-    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.4.5"
   }
 }

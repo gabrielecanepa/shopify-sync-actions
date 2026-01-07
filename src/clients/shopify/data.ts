@@ -4,7 +4,7 @@ export const STORE_ID = env('SHOPIFY_STORE_ID')
 export const COLLECTION_METAFIELD = env('SHOPIFY_COLLECTION_METAFIELD')
 export const LOCATION_ID = env('SHOPIFY_LOCATION_ID', null)
 
-export const API_VERSION = '2024-04'
+export const API_VERSION = '2026-04'
 export const RESOURCES_LIMIT = 250
 export const THROTTLED_MESSAGE = 'Throttled'
 

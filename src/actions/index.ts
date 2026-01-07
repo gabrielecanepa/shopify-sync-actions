@@ -1,5 +1,5 @@
-import { syncCollectionsStatus } from './sync-collections-status'
-import { syncProductsQuantity } from './sync-products-quantity'
+import { syncCollections } from './sync-collections'
+import { syncProducts } from './sync-products'
 
-export { syncCollectionsStatus, syncProductsQuantity }
-export default { syncCollectionsStatus, syncProductsQuantity }
+export { syncCollections, syncProducts }
+export default { syncCollections, syncProducts }

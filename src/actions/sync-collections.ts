@@ -107,7 +107,7 @@ const updateCollections = async (
         const errors = parseUserErrors(userErrors)
 
         if (errors) {
-          await sheets.logSyncCollectionsStatus({
+          await sheets.logsyncCollections({
             ...actionLog,
             status: ActionStatus.failed,
             message: 'Error: user errors',
@@ -116,7 +116,7 @@ const updateCollections = async (
           return false
         }
 
-        await sheets.logSyncCollectionsStatus({
+        await sheets.logsyncCollections({
           ...logBody,
           status: ActionStatus.failed,
           message: 'Error: unknown error',
@@ -127,7 +127,7 @@ const updateCollections = async (
 
       updatedCollections.push(updated)
       logger.info(`✓ ${actionTitle}: ${toID(updated.id)} (${updated.title})`)
-      await sheets.logSyncCollectionsStatus({ ...logBody, status: ActionStatus.success })
+      await sheets.logsyncCollections({ ...logBody, status: ActionStatus.success })
     }
 
     logger.notice(`${actionTitle}ed ${updatedCollections.length} out of ${collections.length} collections`)
@@ -139,7 +139,7 @@ const updateCollections = async (
 /**
  * Synchronize the publications of all collections in the Shopify store depending on a boolean metafield.
  */
-export const syncCollectionsStatus: Action = async ({ event, retries, runId }) => {
+export const syncCollections: Action = async ({ event, retries, runId }) => {
   const shop = await shopify.fetchShop()
 
   for (const _ of Array(retries).keys()) {
@@ -149,7 +149,7 @@ export const syncCollectionsStatus: Action = async ({ event, retries, runId }) =
     const collections = data?.collections?.nodes || []
 
     if (!collections.length || (Array.isArray(errors) && errors.length)) {
-      await sheets.logSyncCollectionsStatus({
+      await sheets.logsyncCollections({
         ...actionLog,
         status: ActionStatus.failed,
         message: 'Error: no collections found',
@@ -166,7 +166,7 @@ export const syncCollectionsStatus: Action = async ({ event, retries, runId }) =
       ),
     ]
     if (!publications.length || (Array.isArray(errors) && errors.length)) {
-      await sheets.logSyncCollectionsStatus({
+      await sheets.logsyncCollections({
         ...actionLog,
         status: ActionStatus.failed,
         message: 'Error: no publications found',

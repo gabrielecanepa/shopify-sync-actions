@@ -54,7 +54,7 @@ const websiteHyperlink = (variant: Variant, shopName?: string): string =>
 /**
  * Synchronizes product quantities between the PIM and Shopify.
  */
-export const syncProductsQuantity: Action = async ({ event, retries, runId }) => {
+export const syncProducts: Action = async ({ event, retries, runId }) => {
   let updatesCount = 0
 
   for (const i of Array(retries).keys()) {
@@ -72,7 +72,7 @@ export const syncProductsQuantity: Action = async ({ event, retries, runId }) =>
     const variants = data?.productVariants?.edges || []
 
     if (!variants.length) {
-      await sheets.logSyncProductsQuantity({
+      await sheets.logsyncProducts({
         ...baseLog,
         status: ActionStatus.failed,
         message: 'No product variants found',
@@ -122,7 +122,7 @@ export const syncProductsQuantity: Action = async ({ event, retries, runId }) =>
 
     if (!adjustData || errors) {
       if (errors && !isThrottled(errors)) {
-        await sheets.logSyncProductsQuantity({
+        await sheets.logsyncProducts({
           ...baseLog,
           status: ActionStatus.failed,
           errors,
@@ -142,7 +142,7 @@ export const syncProductsQuantity: Action = async ({ event, retries, runId }) =>
       if (!variantChange) continue
 
       logger.info(`✓ [${variantChange.variant.sku}] ${variantChange.quantities.join(' → ')}`)
-      await sheets.logSyncProductsQuantity({
+      await sheets.logsyncProducts({
         ...baseLog,
         status: ActionStatus.success,
         product: productHyperlink(variantChange.variant.product),

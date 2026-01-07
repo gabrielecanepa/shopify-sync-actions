@@ -1,2 +1,2 @@
-export { appendActionLog, logSyncCollectionsStatus, logSyncProductsQuantity } from './logs'
+export { appendActionLog, logsyncCollections, logsyncProducts } from './logs'
 export { AppendRowOptions, AppendRowResponse, appendRows } from './rows'

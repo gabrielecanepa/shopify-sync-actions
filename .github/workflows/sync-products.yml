@@ -1,14 +1,14 @@
-name: Sync Products Quantity
+name: Sync Products
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: "*/5 * * * *"
   repository_dispatch:
-    types: ['Sync Products Quantity']
+    types: ["sync-products"]
   workflow_dispatch:
 
 jobs:
-  sync-products-quantity:
+  sync-products:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,17 +20,17 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install
-      - run: pnpm run action sync-products-quantity --event ${{ github.event_name }} --retries ${{ env.RETRIES }} --runId ${{ github.run_id }}
-        name: Run action sync-products-quantity
+      - run: pnpm run action sync-products --event ${{ github.event_name }} --retries ${{ env.RETRIES }} --runId ${{ github.run_id }}
+        name: Run action sync-products
         env:
           GOOGLE_SHEETS_CLIENT_EMAIL: ${{ secrets.GOOGLE_SHEETS_CLIENT_EMAIL }}
           GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.GOOGLE_SHEETS_PRIVATE_KEY }}
           GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}
-          GOOGLE_SHEETS_SYNC_PRODUCTS_QUANTITY_SHEET: ${{ secrets.GOOGLE_SHEETS_SYNC_PRODUCTS_QUANTITY_SHEET }}
-          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
-          SHOPIFY_LOCATION_ID: ${{ secrets.SHOPIFY_LOCATION_ID }}
-          SHOPIFY_STORE_ID: ${{ secrets.SHOPIFY_STORE_ID }}
+          GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET: ${{ secrets.GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET }}
           PIM_API_URL: ${{ secrets.PIM_API_URL }}
           PIM_TOKEN: ${{ secrets.PIM_TOKEN }}
           PIM_VERIFY_ENDPOINT: ${{ secrets.PIM_VERIFY_ENDPOINT }}
           RETRIES: ${{ secrets.RETRIES || 3 }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          SHOPIFY_LOCATION_ID: ${{ secrets.SHOPIFY_LOCATION_ID }}
+          SHOPIFY_STORE_ID: ${{ secrets.SHOPIFY_STORE_ID }}

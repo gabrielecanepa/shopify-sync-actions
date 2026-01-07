@@ -1,7 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
-# Load Husky
-. "$(dirname "$0")/_/husky.sh"
-
-# Run CI checks
+commitlint --from origin/main --to HEAD --verbose
 pnpm run check

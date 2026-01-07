@@ -31,10 +31,9 @@ export interface FetchProductVariantRequestOptions {
 /**
  * Response for fetching a product variant.
  */
-export interface FetchProductVariantResponse<T = ProductVariant>
-  extends ClientResponse<{
-    productVariant: T
-  }> {}
+export interface FetchProductVariantResponse<T = ProductVariant> extends ClientResponse<{
+  productVariant: T
+}> {}
 
 const fetchProductVariantOperation = ({ id, fields }: FetchProductVariantRequestOptions) => {
   const nodeFields = [PRODUCT_VARIANT_FIELDS, fields].filter(Boolean).join('\n')
@@ -61,18 +60,17 @@ export interface FetchProductVariantsRequestOptions {
 /**
  * Response for fetching product variants.
  */
-export interface FetchProductVariantsResponse<T = ProductVariant>
-  extends ClientResponse<{
-    productVariants?: {
-      edges: T[]
-      pageInfo?: {
-        startCursor: string
-        endCursor: string
-        hasPreviousPage: boolean
-        hasNextPage: boolean
-      }
+export interface FetchProductVariantsResponse<T = ProductVariant> extends ClientResponse<{
+  productVariants?: {
+    edges: T[]
+    pageInfo?: {
+      startCursor: string
+      endCursor: string
+      hasPreviousPage: boolean
+      hasNextPage: boolean
     }
-  }> {}
+  }
+}> {}
 
 const fetchProductVariantsOperation = ({ cursor, fields, ids }: FetchProductVariantsRequestOptions) => {
   const params = ['$limit: Int!']

@@ -15,18 +15,17 @@ export interface FetchOrdersRequestOptions {
 /**
  * Response for fetching orders using the Shopify Admin API.
  */
-export interface FetchOrdersResponse<T = Order>
-  extends ClientResponse<{
-    orders?: {
-      edges: T[]
-      pageInfo?: {
-        startCursor: string
-        endCursor: string
-        hasPreviousPage: boolean
-        hasNextPage: boolean
-      }
+export interface FetchOrdersResponse<T = Order> extends ClientResponse<{
+  orders?: {
+    edges: T[]
+    pageInfo?: {
+      startCursor: string
+      endCursor: string
+      hasPreviousPage: boolean
+      hasNextPage: boolean
     }
-  }> {}
+  }
+}> {}
 
 /**
  * Fetch orders and page info from the Shopify API.

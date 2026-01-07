@@ -8,11 +8,5 @@ export const SPREADSHEET_BASE_URL = 'https://docs.google.com/spreadsheets/d'
 export const DEFAULT_RANGE = 'A1'
 
 export const SPREADSHEET_ID = env('GOOGLE_SHEETS_SPREADSHEET_ID')
-export const SYNC_COLLECTIONS_STATUS_SHEET = env(
-  'GOOGLE_SHEETS_SYNC_COLLECTIONS_STATUS_SHEET',
-  'Collection Status Operations'
-)
-export const SYNC_PRODUCTS_QUANTITY_SHEET = env(
-  'GOOGLE_SHEETS_SYNC_PRODUCTS_QUANTITY_SHEET',
-  'Product Quantity Operations'
-)
+export const SYNC_COLLECTIONS_STATUS_SHEET = env('GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET', 'Collection Status Operations')
+export const SYNC_PRODUCTS_QUANTITY_SHEET = env('GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET', 'Product Quantity Operations')

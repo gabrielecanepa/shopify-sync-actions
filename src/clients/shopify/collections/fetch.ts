@@ -15,18 +15,17 @@ export interface FetchCollectionsRequestOptions {
 /**
  * Response after fetching collections using the Shopify Admin API.
  */
-export interface FetchCollectionsResponse<T = Collection>
-  extends ClientResponse<{
-    collections?: {
-      nodes: T[]
-      pageInfo?: {
-        startCursor: string
-        endCursor: string
-        hasPreviousPage: boolean
-        hasNextPage: boolean
-      }
+export interface FetchCollectionsResponse<T = Collection> extends ClientResponse<{
+  collections?: {
+    nodes: T[]
+    pageInfo?: {
+      startCursor: string
+      endCursor: string
+      hasPreviousPage: boolean
+      hasNextPage: boolean
     }
-  }> {}
+  }
+}> {}
 
 /**
  * Fetches collections and page data from the Shopify API.

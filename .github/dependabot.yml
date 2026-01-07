@@ -1,17 +1,17 @@
 version: 2
 
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "monthly"
+      interval: quarterly
     labels:
-      - "dependencies"
+      - dependencies
     groups:
       production:
-        dependency-type: "production"
+        dependency-type: production
       development:
-        dependency-type: "development"
+        dependency-type: development
     commit-message:
-      prefix: "build(deps)"
-      prefix-development: "build(deps-dev)"
+      prefix: build(deps)
+      prefix-development: build(deps)

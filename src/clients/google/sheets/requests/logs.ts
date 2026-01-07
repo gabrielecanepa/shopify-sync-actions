@@ -10,7 +10,7 @@ import { formatDate, getActionRunURL, isCI, logger, titleize } from '@/utils'
 
 const source = isCI ? 'GitHub Actions' : 'Local'
 
-interface SyncCollectionsStatusPayload extends ActionPayload {
+interface syncCollectionsPayload extends ActionPayload {
   action?: 'publish' | 'unpublish'
   collection?: string
   website?: string
@@ -19,7 +19,7 @@ interface SyncCollectionsStatusPayload extends ActionPayload {
   new?: number
 }
 
-interface SyncCollectionsStatusLog {
+interface syncCollectionsLog {
   Action?: 'Publish' | 'Unpublish' | 'None'
   Collection?: string
   Website?: string
@@ -28,7 +28,7 @@ interface SyncCollectionsStatusLog {
   'New Publications'?: number
 }
 
-interface SyncProductsQuantityPayload extends ActionPayload {
+interface syncProductsPayload extends ActionPayload {
   product?: string
   variant?: string
   website?: string
@@ -37,7 +37,7 @@ interface SyncProductsQuantityPayload extends ActionPayload {
   delta?: number
 }
 
-interface SyncProductsQuantityLog {
+interface syncProductsLog {
   Product?: string
   Variant?: string
   Website?: string
@@ -76,10 +76,10 @@ export const appendActionLog = async <T extends BaseObject>(
 }
 
 /**
- * Logs the `sync-collections-status` action to Google Sheets.
+ * Logs the `sync-collections` action to Google Sheets.
  */
-export const logSyncCollectionsStatus = async (payload: SyncCollectionsStatusPayload) =>
-  appendActionLog<SyncCollectionsStatusLog>(SYNC_COLLECTIONS_STATUS_SHEET, payload, {
+export const logsyncCollections = async (payload: syncCollectionsPayload) =>
+  appendActionLog<syncCollectionsLog>(SYNC_COLLECTIONS_STATUS_SHEET, payload, {
     Action: (titleize(payload.action) as 'Publish' | 'Unpublish') || 'None',
     Collection: payload.collection,
     Website: payload.website,
@@ -91,8 +91,8 @@ export const logSyncCollectionsStatus = async (payload: SyncCollectionsStatusPay
 /**
  * Logs the `sync-products-quantity` action to the Google Sheet.
  */
-export const logSyncProductsQuantity = async (payload: SyncProductsQuantityPayload) =>
-  appendActionLog<SyncProductsQuantityLog>(SYNC_PRODUCTS_QUANTITY_SHEET, payload, {
+export const logsyncProducts = async (payload: syncProductsPayload) =>
+  appendActionLog<syncProductsLog>(SYNC_PRODUCTS_QUANTITY_SHEET, payload, {
     Product: payload.product,
     Variant: payload.variant,
     Website: payload.website,

@@ -72,7 +72,7 @@ export const syncProducts: Action = async ({ event, retries, runId }) => {
     const variants = data?.productVariants?.edges || []
 
     if (!variants.length) {
-      await sheets.logsyncProducts({
+      await sheets.logProducts({
         ...baseLog,
         status: ActionStatus.failed,
         message: 'No product variants found',
@@ -122,7 +122,7 @@ export const syncProducts: Action = async ({ event, retries, runId }) => {
 
     if (!adjustData || errors) {
       if (errors && !isThrottled(errors)) {
-        await sheets.logsyncProducts({
+        await sheets.logProducts({
           ...baseLog,
           status: ActionStatus.failed,
           errors,
@@ -142,7 +142,7 @@ export const syncProducts: Action = async ({ event, retries, runId }) => {
       if (!variantChange) continue
 
       logger.info(`✓ [${variantChange.variant.sku}] ${variantChange.quantities.join(' → ')}`)
-      await sheets.logsyncProducts({
+      await sheets.logProducts({
         ...baseLog,
         status: ActionStatus.success,
         product: productHyperlink(variantChange.variant.product),

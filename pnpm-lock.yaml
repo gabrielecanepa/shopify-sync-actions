@@ -76,7 +76,7 @@ importers:
         specifier: ^3.2.5
         version: 3.8.1
       release-it:
-        specifier: ^17.3.0
+        specifier: ^17.11.0
         version: 17.11.0(typescript@5.9.3)
       tsx:
         specifier: ^4.21.0

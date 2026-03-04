@@ -58,6 +58,7 @@ const fields = `
 `
 
 const countPublications = ({ resourcePublicationsV2 }: PublishCollection) => resourcePublicationsV2.length
+
 const isObsolete = ({ metafields }: PublishCollection) => {
   const { value } = metafields.find(({ key }) => key === COLLECTION_METAFIELD) || {}
   return value === 'true'
@@ -65,6 +66,7 @@ const isObsolete = ({ metafields }: PublishCollection) => {
 
 const collectionHyperlink = (collection: Collection) =>
   hyperlink(`https://${adminDomain}/collections/${toID(collection.id)}`, collection.title)
+
 const websiteHyperlink = (collection: PublishCollection, shop?: Shop): string => {
   const url = `${shop?.url || storeDomain}/collections/${collection.handle}`
   const name = `${collection.title}${shop?.name ? ` - ${shop.name}` : ''}`
@@ -95,11 +97,8 @@ const updateCollections = async (
       const logBody = {
         ...actionLog,
         action,
-        collection: collectionHyperlink(updated as PublishCollection),
-        website: websiteHyperlink(updated as PublishCollection, shop),
         products: collection.productsCount.count,
         previous: countPublications(collection),
-        new: countPublications(updated as PublishCollection) || 0,
       }
 
       if (!updated) {
@@ -107,7 +106,7 @@ const updateCollections = async (
         const errors = parseUserErrors(userErrors)
 
         if (errors) {
-          await sheets.logsyncCollections({
+          await sheets.logCollections({
             ...actionLog,
             status: ActionStatus.failed,
             message: 'Error: user errors',
@@ -116,7 +115,7 @@ const updateCollections = async (
           return false
         }
 
-        await sheets.logsyncCollections({
+        await sheets.logCollections({
           ...logBody,
           status: ActionStatus.failed,
           message: 'Error: unknown error',
@@ -127,7 +126,13 @@ const updateCollections = async (
 
       updatedCollections.push(updated)
       logger.info(`✓ ${actionTitle}: ${toID(updated.id)} (${updated.title})`)
-      await sheets.logsyncCollections({ ...logBody, status: ActionStatus.success })
+      await sheets.logCollections({
+        ...logBody,
+        status: ActionStatus.success,
+        collection: collectionHyperlink(updated as PublishCollection),
+        website: websiteHyperlink(updated as PublishCollection, shop),
+        new: countPublications(updated as PublishCollection) || 0,
+      })
     }
 
     logger.notice(`${actionTitle}ed ${updatedCollections.length} out of ${collections.length} collections`)
@@ -149,7 +154,7 @@ export const syncCollections: Action = async ({ event, retries, runId }) => {
     const collections = data?.collections?.nodes || []
 
     if (!collections.length || (Array.isArray(errors) && errors.length)) {
-      await sheets.logsyncCollections({
+      await sheets.logCollections({
         ...actionLog,
         status: ActionStatus.failed,
         message: 'Error: no collections found',
@@ -166,7 +171,7 @@ export const syncCollections: Action = async ({ event, retries, runId }) => {
       ),
     ]
     if (!publications.length || (Array.isArray(errors) && errors.length)) {
-      await sheets.logsyncCollections({
+      await sheets.logCollections({
         ...actionLog,
         status: ActionStatus.failed,
         message: 'Error: no publications found',
@@ -178,6 +183,8 @@ export const syncCollections: Action = async ({ event, retries, runId }) => {
     const publish = collections.filter(col => !isObsolete(col) && countPublications(col) < publications.length)
     const unpublish = collections.filter(col => isObsolete(col) && countPublications(col) > 0)
 
-    if (await updateCollections({ publish, unpublish }, publications, shop, actionLog)) exit(null, 0)
+    if (await updateCollections({ publish, unpublish }, publications, shop, actionLog)) {
+      exit(null, 0)
+    }
   }
 }

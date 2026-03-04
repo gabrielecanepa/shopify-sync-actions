@@ -37,4 +37,5 @@ jobs:
       - name: Run sync-collections action
         run: pnpm run action sync-collections --event ${{ github.event_name }} --runId ${{ github.run_id }}
       - name: Run sync-products action
+        if: ${{ always() }}
         run: pnpm run action sync-products --event ${{ github.event_name }} --runId ${{ github.run_id }}

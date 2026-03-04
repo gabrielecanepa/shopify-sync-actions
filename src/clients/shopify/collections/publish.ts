@@ -34,14 +34,17 @@ export interface PublishCollectionOptions {
 /**
  * Response after publishing or unpublishing a collection using the Shopify Admin API.
  */
+export interface CollectionPublishResult<T extends Collection = Collection> {
+  collection?: T
+  userErrors?: {
+    field: string
+    message: string
+  }[]
+}
+
 export interface PublishCollectionResponse<T extends Collection = Collection> {
-  collectionUnpublish: {
-    collection?: T
-    userErrors?: {
-      field: string
-      message: string
-    }[]
-  }
+  collectionPublish?: CollectionPublishResult<T>
+  collectionUnpublish?: CollectionPublishResult<T>
 }
 
 const editCollectionPublications = async <T extends Collection = Collection>({
@@ -49,11 +52,10 @@ const editCollectionPublications = async <T extends Collection = Collection>({
   publications,
   fields,
   action = 'publish',
-}: PublishCollectionOptions & { action: 'publish' | 'unpublish' }): Promise<
-  PublishCollectionResponse<T>['collectionUnpublish']
-> => {
+}: PublishCollectionOptions & { action: 'publish' | 'unpublish' }): Promise<CollectionPublishResult<T>> => {
   const operation = getPublishOperation(action, fields)
   const collectionPublications = publications.map(publicationId => ({ publicationId }))
+  const responseKey = `collection${titleize(action)}` as keyof PublishCollectionResponse<T>
 
   const { data, errors } = await client.request<PublishCollectionResponse<T>>(operation, {
     variables: {
@@ -63,7 +65,7 @@ const editCollectionPublications = async <T extends Collection = Collection>({
 
   if (errors) throw new Error(`${errors.message} (${errors.networkStatusCode})`)
 
-  return data?.collectionUnpublish || {}
+  return data?.[responseKey] || {}
 }
 
 /**
@@ -73,7 +75,7 @@ export const publishCollection = async <T extends Collection = Collection>({
   id,
   publications,
   fields,
-}: PublishCollectionOptions): Promise<PublishCollectionResponse<T>['collectionUnpublish']> =>
+}: PublishCollectionOptions): Promise<CollectionPublishResult<T>> =>
   editCollectionPublications({ id, publications, fields, action: 'publish' })
 
 /**
@@ -83,5 +85,5 @@ export const unpublishCollection = async <T extends Collection = Collection>({
   id,
   publications,
   fields,
-}: PublishCollectionOptions): Promise<PublishCollectionResponse<T>['collectionUnpublish']> =>
+}: PublishCollectionOptions): Promise<CollectionPublishResult<T>> =>
   editCollectionPublications({ id, publications, fields, action: 'unpublish' })

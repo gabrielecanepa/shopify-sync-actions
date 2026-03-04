@@ -1,10 +1,5 @@
-import sheets, {
-  AppendRowResponse,
-  SPREADSHEET_ID,
-  SYNC_COLLECTIONS_STATUS_SHEET,
-  SYNC_PRODUCTS_QUANTITY_SHEET,
-  hyperlink,
-} from '@@/google/sheets'
+import sheets, { SPREADSHEET_ID, SYNC_COLLECTIONS_STATUS_SHEET, SYNC_PRODUCTS_QUANTITY_SHEET } from '@@/google/sheets'
+import { hyperlink } from '@@/google/sheets/utils'
 import { ActionPayload, ActionStatus, BaseObject } from '@/types'
 import { formatDate, getActionRunURL, isCI, logger, titleize } from '@/utils'
 
@@ -49,11 +44,7 @@ interface syncProductsLog {
 /**
  * Appends an action log with arbitrary fields to the Google Sheet.
  */
-export const appendActionLog = async <T extends BaseObject>(
-  sheet: string,
-  payload: ActionPayload,
-  log: T
-): Promise<AppendRowResponse> => {
+export const appendActionLog = async <T extends BaseObject>(sheet: string, payload: ActionPayload, log: T) => {
   const hasErrors = Array.isArray(payload.errors) ? !!payload.errors.length : !!payload.errors
   const event = titleize(payload.event || '', false)
   const githubRun = payload.runId ? hyperlink(getActionRunURL(payload.runId), payload.runId) : ''
@@ -78,7 +69,7 @@ export const appendActionLog = async <T extends BaseObject>(
 /**
  * Logs the `sync-collections` action to Google Sheets.
  */
-export const logsyncCollections = async (payload: syncCollectionsPayload) =>
+export const logCollections = async (payload: syncCollectionsPayload) =>
   appendActionLog<syncCollectionsLog>(SYNC_COLLECTIONS_STATUS_SHEET, payload, {
     Action: (titleize(payload.action) as 'Publish' | 'Unpublish') || 'None',
     Collection: payload.collection,
@@ -91,7 +82,7 @@ export const logsyncCollections = async (payload: syncCollectionsPayload) =>
 /**
  * Logs the `sync-products-quantity` action to the Google Sheet.
  */
-export const logsyncProducts = async (payload: syncProductsPayload) =>
+export const logProducts = async (payload: syncProductsPayload) =>
   appendActionLog<syncProductsLog>(SYNC_PRODUCTS_QUANTITY_SHEET, payload, {
     Product: payload.product,
     Variant: payload.variant,

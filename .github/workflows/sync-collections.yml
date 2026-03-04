@@ -1,8 +1,6 @@
 name: Sync Collections
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   repository_dispatch:
     types: ["sync-collections"]
   workflow_dispatch:
@@ -11,22 +9,23 @@ jobs:
   sync-collections:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
         with:
-          version: 8.10.5
+          run_install: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: pnpm
-      - run: pnpm install
-      - run: pnpm run action sync-collections --event ${{ github.event_name }} --runId ${{ github.run_id }}
-        name: Run action sync-collections
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts --strict-peer-dependencies
+      - name: Run sync-collections action
+        run: pnpm run action sync-collections --event ${{ github.event_name }} --runId ${{ github.run_id }}
         env:
           GOOGLE_SHEETS_CLIENT_EMAIL: ${{ secrets.GOOGLE_SHEETS_CLIENT_EMAIL }}
           GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.GOOGLE_SHEETS_PRIVATE_KEY }}
           GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}
-          GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET: ${{ secrets.GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET }}
+          GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET: ${{ vars.GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET }}
           SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
           SHOPIFY_COLLECTION_METAFIELD: ${{ secrets.SHOPIFY_COLLECTION_METAFIELD }}
           SHOPIFY_STORE_ID: ${{ secrets.SHOPIFY_STORE_ID }}

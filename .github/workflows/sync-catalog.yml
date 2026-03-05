@@ -36,6 +36,26 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts --strict-peer-dependencies
       - name: Run sync-collections action
         run: pnpm run action sync-collections --event ${{ github.event_name }} --runId ${{ github.run_id }}
+        env:
+          GOOGLE_SHEETS_CLIENT_EMAIL: ${{ secrets.GOOGLE_SHEETS_CLIENT_EMAIL }}
+          GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.GOOGLE_SHEETS_PRIVATE_KEY }}
+          GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}
+          GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET: ${{ vars.GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          SHOPIFY_COLLECTION_METAFIELD: ${{ secrets.SHOPIFY_COLLECTION_METAFIELD }}
+          SHOPIFY_STORE_ID: ${{ secrets.SHOPIFY_STORE_ID }}
       - name: Run sync-products action
         if: ${{ always() }}
-        run: pnpm run action sync-products --event ${{ github.event_name }} --runId ${{ github.run_id }}
+        run: pnpm run action sync-products --event ${{ github.event_name }} --retries ${{ env.RETRIES }} --runId ${{ github.run_id }}
+        env:
+          GOOGLE_SHEETS_CLIENT_EMAIL: ${{ secrets.GOOGLE_SHEETS_CLIENT_EMAIL }}
+          GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.GOOGLE_SHEETS_PRIVATE_KEY }}
+          GOOGLE_SHEETS_SPREADSHEET_ID: ${{ secrets.GOOGLE_SHEETS_SPREADSHEET_ID }}
+          GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET: ${{ vars.GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET }}
+          PIM_API_URL: ${{ secrets.PIM_API_URL }}
+          PIM_TOKEN: ${{ secrets.PIM_TOKEN }}
+          PIM_VERIFY_ENDPOINT: ${{ secrets.PIM_VERIFY_ENDPOINT }}
+          RETRIES: ${{ vars.RETRIES || 3 }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          SHOPIFY_LOCATION_ID: ${{ secrets.SHOPIFY_LOCATION_ID }}
+          SHOPIFY_STORE_ID: ${{ secrets.SHOPIFY_STORE_ID }}

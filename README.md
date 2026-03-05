@@ -1,5 +1,9 @@
 # Shopify Sync Actions
 
+[![Sync Catalog](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-catalog.yml/badge.svg)](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-catalog.yml)
+[![Sync Collections](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-collections.yml/badge.svg)](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-collections.yml)
+[![Sync Products](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-products.yml/badge.svg)](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-products.yml)
+
 Actions to synchronize data between a Shopify store and external services.
 
 ## Setup
@@ -26,17 +30,17 @@ Each action can be run as a GitHub Actions workflow defined in the `.github/work
 
 The action synchronizes the publications of a Shopify collection depending on a given metafield and logs the operations in a Google Sheets spreadsheet.
 
-| Workflow                                                     | Environment                                                                                                                                                                             | Schedule      |
-| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| [`sync-collections`](.github/workflows/sync-collections.yml) | `GOOGLE_SHEETS_CLIENT_EMAIL`<br>`GOOGLE_SHEETS_PRIVATE_KEY`<br>`GOOGLE_SHEETS_SPREADSHEET_ID`<br>`GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET`<br>`SHOPIFY_ACCESS_TOKEN`<br>`SHOPIFY_STORE_ID` | Every 3 hours |
+| Workflow                                                     | Environment                                                                                                                                                                             |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`sync-collections`](.github/workflows/sync-collections.yml) | `GOOGLE_SHEETS_CLIENT_EMAIL`<br>`GOOGLE_SHEETS_PRIVATE_KEY`<br>`GOOGLE_SHEETS_SPREADSHEET_ID`<br>`GOOGLE_SHEETS_SYNC_COLLECTIONS_SHEET`<br>`SHOPIFY_ACCESS_TOKEN`<br>`SHOPIFY_STORE_ID` |
 
 ### Sync Products Quantity
 
 The action synchronizes the quantity of the products in a customer PIM with the quantity in the Shopify store and logs the operations in a Google Sheets spreadsheet.
 
-| Workflow                                               | Environment                                                                                                                                                                                                                                                                                      | Schedule                                              |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
-| [`sync-products`](.github/workflows/sync-products.yml) | `GOOGLE_SHEETS_CLIENT_EMAIL`<br>`GOOGLE_SHEETS_PRIVATE_KEY`<br>`GOOGLE_SHEETS_SPREADSHEET_ID`<br>`GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET`<br>`PIM_API_URL`<br>`PIM_API_KEY`<br>`PIM_VERIFY_ENDPOINT`<br>`RETRIES` (optional)<br>`SHOPIFY_ACCESS_TOKEN`<br>`SHOPIFY_LOCATION_ID`<br>`SHOPIFY_STORE_ID` | Every minute[\*](#run-workflows-in-shorter-intervals) |
+| Workflow                                               | Environment                                                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`sync-products`](.github/workflows/sync-products.yml) | `GOOGLE_SHEETS_CLIENT_EMAIL`<br>`GOOGLE_SHEETS_PRIVATE_KEY`<br>`GOOGLE_SHEETS_SPREADSHEET_ID`<br>`GOOGLE_SHEETS_SYNC_PRODUCTS_SHEET`<br>`PIM_API_URL`<br>`PIM_API_KEY`<br>`PIM_VERIFY_ENDPOINT`<br>`RETRIES` (optional)<br>`SHOPIFY_ACCESS_TOKEN`<br>`SHOPIFY_LOCATION_ID`<br>`SHOPIFY_STORE_ID` |
 
 ## Notes
 

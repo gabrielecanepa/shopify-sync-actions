@@ -1,6 +1,7 @@
 {
   "name": "shopify-sync-actions",
   "version": "1.0.2",
+  "packageManager": "pnpm@10.30.3",
   "scripts": {
     "prepare": "husky",
     "build": "tsc",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/types": "^20.4.3",
     "@shopify/cli": "^3.60.1",
     "@types/node": "^20.12.12",
     "@types/pluralize": "^0.0.33",
@@ -39,6 +41,5 @@
     "release-it": "^17.11.0",
     "tsx": "^4.21.0",
     "typescript": "^5.4.5"
-  },
-  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017"
+  }
 }

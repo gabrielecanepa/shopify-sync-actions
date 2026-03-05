@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-commitlint --from origin/main --to HEAD --verbose
+./node_modules/.bin/commitlint --from origin/main --to HEAD --verbose
 pnpm run check

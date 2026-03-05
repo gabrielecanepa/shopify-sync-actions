@@ -1,6 +1,8 @@
 name: Sync Products
 
 on:
+  schedule:
+    - cron: "*/5 * * * *"
   repository_dispatch:
     types: ["sync-products"]
   workflow_dispatch:

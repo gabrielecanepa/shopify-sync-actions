@@ -1,20 +1,21 @@
 # Shopify Sync Actions
 
-[![Sync Catalog](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-catalog.yml/badge.svg)](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-catalog.yml)
 [![Sync Collections](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-collections.yml/badge.svg)](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-collections.yml)
 [![Sync Products](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-products.yml/badge.svg)](https://github.com/gabrielecanepa/shopify-sync-actions/actions/workflows/sync-products.yml)
 
-Actions to synchronize data between a Shopify store and external services.
+Actions to synchronize data between Shopify stores and external services.
 
 ## Setup
 
 Download the repository and install the dependencies:
 
 ```sh
+git clone git@github.com:gabrielecanepa/shopify-sync-actions.git
+cd shopify-sync-actions
 pnpm install
 ```
 
-Copy the `.env.example` file to `.env` and fill in the necessary environment variables depending on the actions you want to run.
+Copy the `.env.example` file to `.env` and fill in the necessary environment variables for the actions you want to run.
 
 ## Actions
 
@@ -24,7 +25,7 @@ Run an action with:
 pnpm run action <workflow-name>
 ```
 
-Each action can be run as a GitHub Actions workflow defined in the `.github/workflows` directory and needs specific environment variables. Once set up, all actions can be triggered manually via the `Run workflow` button in the repository Actions tab.
+Each action has a corresponding workflow in the `.github/workflows` that runs every 5 minutes[\*](#run-workflows-in-shorter-intervals) and can be triggered manually from the repository's Actions tab.
 
 ### Sync Collections Status
 
@@ -36,7 +37,7 @@ The action synchronizes the publications of a Shopify collection depending on a 
 
 ### Sync Products Quantity
 
-The action synchronizes the quantity of the products in a customer PIM with the quantity in the Shopify store and logs the operations in a Google Sheets spreadsheet.
+The action synchronizes the product quantities stored in a custom system with the quantities of the Shopify store, and logs the operations in a Google Sheets spreadsheet.
 
 | Workflow                                               | Environment                                                                                                                                                                                                                                                                                      |
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |

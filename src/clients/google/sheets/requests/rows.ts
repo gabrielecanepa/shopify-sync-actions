@@ -1,5 +1,6 @@
 import { sheets_v4 } from '@googleapis/sheets'
 import { DEFAULT_RANGE, SPREADSHEET_ID, client } from '@@/google/sheets'
+import { withRetry } from '@/utils'
 
 /**
  * Append rows to a table in the specified sheet.
@@ -31,13 +32,15 @@ export const appendRows = async <T extends Record<string, any> | any[]>({
   values = values.map(value => (Array.isArray(value) ? value : Object.values(value))) as any[]
 
   return (
-    await client.values.append({
-      includeValuesInResponse: true,
-      range,
-      requestBody: { range, values: values as any[][] },
-      spreadsheetId,
-      valueInputOption: 'USER_ENTERED',
-      ...opts,
-    })
+    await withRetry(() =>
+      client.values.append({
+        includeValuesInResponse: true,
+        range,
+        requestBody: { range, values: values as any[][] },
+        spreadsheetId,
+        valueInputOption: 'USER_ENTERED',
+        ...opts,
+      })
+    )
   ).data
 }

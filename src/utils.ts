@@ -1,6 +1,14 @@
 import parseArgs from 'yargs-parser'
-import { MAX_RETRIES, REPOSITORY_URL, RETRIES } from '@/data'
-import { ActionArgs, ActionEvent, ActionOptions } from '@/types'
+import {
+  MAX_RETRIES,
+  REPOSITORY_URL,
+  REQUEST_RETRIES,
+  REQUEST_RETRY_DELAY,
+  RETRIES,
+  TRANSIENT_ERROR_CODES,
+  TRANSIENT_STATUS_CODES,
+} from '@/data'
+import { ActionArgs, ActionEvent, ActionOptions, BaseObject } from '@/types'
 import pluralize from 'pluralize'
 
 export { default as pluralize } from 'pluralize'
@@ -70,6 +78,45 @@ export const sentencize = (array: any[]): string => new Intl.ListFormat().format
  */
 export const times = async <T>(n: number, callback: (i: number) => T): Promise<T[]> =>
   Promise.all(range(1, n).map(i => callback(i)))
+
+/**
+ * Waits for the given amount of milliseconds.
+ */
+export const sleep = async (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms))
+
+/**
+ * Checks if an error is a transient network or server error worth retrying.
+ */
+export const isTransientError = (error: unknown, depth = 2): boolean => {
+  if (depth < 0 || !error || typeof error !== 'object') return false
+
+  const { cause, code, error: nested, status } = error as BaseObject
+
+  if (TRANSIENT_STATUS_CODES.includes(status) || TRANSIENT_STATUS_CODES.includes(code)) return true
+  if (TRANSIENT_ERROR_CODES.includes(code)) return true
+
+  return isTransientError(nested, depth - 1) || isTransientError(cause, depth - 1)
+}
+
+/**
+ * Runs an asynchronous operation, retrying transient errors with an exponential backoff.
+ */
+export const withRetry = async <T>(
+  fn: () => Promise<T>,
+  retries = REQUEST_RETRIES,
+  delay = REQUEST_RETRY_DELAY
+): Promise<T> => {
+  for (const attempt of range(1, retries)) {
+    try {
+      return await fn()
+    } catch (error) {
+      if (attempt === retries || !isTransientError(error)) throw error
+      logger.warning(`Transient error, retrying (${attempt}/${retries - 1})`)
+      await sleep(delay * 2 ** (attempt - 1))
+    }
+  }
+  throw new Error(`Failed after ${retries} attempts`)
+}
 
 /**
  * Converts a Shopify ID to a number ID.
